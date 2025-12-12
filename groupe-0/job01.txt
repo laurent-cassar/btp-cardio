@@ -1,0 +1,38 @@
+alias l='ls -lAh'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias g='git status'
+alias tig='tig --all'
+alias ga='git add'
+alias gcm='git commit -m'
+alias gcl='git clone
+alias gp='git clone'
+alias gp='git push
+alias src='source /root/.bashrc'
+alias p='pwd'
+
+export PATH=$PATH:/app/repo
+
+# Fonction pour récupérer la branche Git active
+parse_git_branch() {
+  git branch 2>/dev/null | grep '*' | awk '{print " (" $2 ")"}'
+}
+
+# Fonction pour afficher le prompt
+set_prompt() {
+  local EXIT="$?"  # code de sortie de la dernière commande
+
+  # Couleur du $ selon succès (vert) ou échec (rouge)
+  if [ $EXIT -eq 0 ]; then
+    local SYMBOL_COLOR="\[\e[32m\]"  # vert si succès
+  else
+    local SYMBOL_COLOR="\[\e[31m\]"  # rouge si erreur
+  fi
+
+  # Construction du PS1
+  export PS1="\[\e[35m\]\u@\h \[\e[94m\][\D{%Y-%m-%d}]\[\e[34m\] \D{%H:%M:%S}\[\e[32m\] \w\[\e[33m\]\$(parse_git_branch)\[\e[0m\] ${SYMBOL_COLOR}\$ \[\e[0m\]"
+}
+
+# Activer le prompt à chaque commande
+PROMPT_COMMAND=set_prompt
+
